@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## My Personal Portfolio WebSite
 
 
@@ -25,3 +26,7 @@ Personal portfolio website made with Django framework in the backend, and with C
 
 #### About & Contact Me Sections:
 <img aline="center" src="https://i.imgur.com/djYOST6.png" alt="secreenshot">
+=======
+# portfolio
+My Portfolio
+>>>>>>> b45cf1b051762b32bba95d074112427249f5783e
