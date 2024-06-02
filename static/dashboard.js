@@ -1,40 +1,40 @@
 // edit profile code
 const saveProfileEdit = document.querySelector('#save-profile-edit');
 if (saveProfileEdit) {
-	saveProfileEdit.addEventListener('click', (e) => {
-		e.preventDefault();
+    saveProfileEdit.addEventListener('click', (e) => {
+        e.preventDefault();
         // Build formData object.
         let formData = new FormData();
         formData.append('name_complete', document.querySelector('#full_name').value);
         formData.append('mini_about', document.querySelector('#mini-about').value);
-		formData.append('about', document.querySelector('#about').value);
-		formData.append('email', document.querySelector('#email').value);
-		formData.append('github', document.querySelector('#github').value);
-		formData.append('linkedin', document.querySelector('#linkedin').value);
-		formData.append('facebook', document.querySelector('#facebook').value);
-		formData.append('instagram', document.querySelector('#instagram').value);
-		formData.append('twitter', document.querySelector('#twitter').value);
-		formData.append('phone', document.querySelector('#phone').value);
-		
-		fetch('/dashboard/profile/edit/', {
-			body: formData,
-			method: "post",
-			credentials: 'same-origin',
-			headers: {
-				"X-CSRFToken": csrftoken
-			}
-		})
-		.then(response => response.json())
-		.then(data => {
-			console.log(data)
-			if (data.success == true) {
-				document.querySelector('#change-success').click();
-				setTimeout(() => {  location.reload(); }, 3000);
-			} else {
-				document.querySelector('#form-errors').innerHTML = "* Something's wrong, please check your information!";
-			}
-		});
-	});
+        formData.append('about', document.querySelector('#about').value);
+        formData.append('email', document.querySelector('#email').value);
+        formData.append('github', document.querySelector('#github').value);
+        formData.append('linkedin', document.querySelector('#linkedin').value);
+        formData.append('facebook', document.querySelector('#facebook').value);
+        formData.append('instagram', document.querySelector('#instagram').value);
+        formData.append('twitter', document.querySelector('#twitter').value);
+        formData.append('phone', document.querySelector('#phone').value);
+
+        fetch('/dashboard/profile/edit/', {
+            body: formData,
+            method: "post",
+            credentials: 'same-origin',
+            headers: {
+                "X-CSRFToken": csrftoken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            if (data.success == true) {
+                document.querySelector('#change-success').click();
+                setTimeout(() => {  location.reload(); }, 3000);
+            } else {
+                document.querySelector('#form-errors').innerHTML = "* Something's wrong, please check your information!";
+            }
+        });
+    });
 }
 // edit profile picture
 const profilePic = document.querySelector('#profile-pic');
@@ -58,7 +58,7 @@ if (deleteMessageBtns) {
 			let formData = new FormData();
 			formData.append('message_id', ID);
 			formData.append('option_type', "delete");
-			
+
 			fetch('/dashboard/messages/api/', {
 				body: formData,
 				method: "post",
@@ -88,7 +88,7 @@ if (viewMessage) {
 			let formData = new FormData();
 			formData.append('message_id', ID);
 			formData.append('option_type', "view");
-			
+
 			fetch('/dashboard/messages/api/', {
 				body: formData,
 				method: "post",
@@ -117,7 +117,7 @@ if (messageSearchBtn) {
 		let formData = new FormData();
 		formData.append('search_text', input);
 		formData.append('option_type', "search");
-		
+
 		fetch('/dashboard/messages/api/', {
 			body: formData,
 			method: "post",
@@ -145,7 +145,7 @@ if (loadNewMessages) {
 		let formData = new FormData();
 		formData.append('search_text', input);
 		formData.append('option_type', "search");
-		
+
 		fetch('/dashboard/messages/api/', {
 			body: formData,
 			method: "post",
@@ -255,43 +255,42 @@ if (createProjectBtn) {
 
 const editProjectBtns = document.querySelectorAll('.svg-icon-edit');
 if (editProjectBtns) {
-	editProjectBtns.forEach(btn => {
-		btn.addEventListener('click', (e) => {
-			e.preventDefault()
-			let formData = new FormData();
-			formData.append('id', btn.attributes.id.value);
-			formData.append('type', 'update');
-			formData.append('first', true);
-	
-			fetch('/dashboard/projects/api/', {
-				body: formData,
-				method: "post",
-				credentials: 'same-origin',
-				headers: {
-					"X-CSRFToken": csrftoken
-				}
-			})
-			.then(response => response.json())
-			.then(data => {
-				if(data.code == 200) {
-					form = document.querySelector('.create-project-form');
-					form.classList.remove('hide');
-					document.querySelector('#creat-project-btn').style.display = 'none';
-					document.querySelector('#submit-update-project').style.display = 'block';
-					project = data.project
-					title.value = project.title
-					// description.value = project.description
-					tinymce.get("form-description").setContent(project.description);
-					tools.value = project.tools
-					demo.value = project.demo
-					github.value = project.github
-					show_in_slider.checked = project.show_in_slider;
-					document.querySelector('#project-id').value = project.id;
-				}
-			});
+    editProjectBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault()
+            let formData = new FormData();
+            formData.append('id', btn.attributes.id.value);
+            formData.append('type', 'update');
+            formData.append('first', true);
 
-		})
-	})
+            fetch('/dashboard/projects/api/', {
+                body: formData,
+                method: "post",
+                credentials: 'same-origin',
+                headers: {
+                    "X-CSRFToken": csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.code == 200) {
+                    form = document.querySelector('.create-project-form');
+                    form.classList.remove('hide');
+                    document.querySelector('#creat-project-btn').style.display = 'none';
+                    document.querySelector('#submit-update-project').style.display = 'block';
+                    project = data.project
+                    title.value = project.title
+                    description.value = project.description // Modificado para usar textarea
+                    tools.value = project.tools
+                    demo.value = project.demo
+                    github.value = project.github
+                    show_in_slider.checked = project.show_in_slider;
+                    document.querySelector('#project-id').value = project.id;
+                }
+            });
+
+        })
+    })
 }
 
 const updateProjectBtns = document.querySelector('#submit-update-project');

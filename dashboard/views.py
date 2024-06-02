@@ -30,7 +30,7 @@ class LoginView(APIView):
     def post(self, request):
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
-        
+
         if not username or not password:
             return render(request, "login.html", {'message': 'Please enter both username and password'})
 
@@ -70,7 +70,7 @@ def profile_edit(request):
 
         avatar = request.FILES.get('avatar', False)
         if avatar:
-            account = Information.objects.first()
+            account, created = Information.objects.get_or_create(pk=1)  # Obtener el primer objeto o crear uno nuevo si no existe
             account.avatar = avatar
             account.save()
             return redirect('dashboard:profile')
@@ -81,6 +81,7 @@ def profile_edit(request):
                 return JsonResponse({'success': True})
             return JsonResponse({'success': False, 'errors': form.errors})
     return JsonResponse({'status':'bad request'})
+
 
 
 @login_required()

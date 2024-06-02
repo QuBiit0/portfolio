@@ -23,12 +23,12 @@
         <!-- Costom CSS -->
         <link type="text/css" href="{% static 'app.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'animation.css' %}" rel="stylesheet">
-        
+
         <link type="text/css" href="{% static 'slider.css' %}" rel="stylesheet">
 
         <!-- button admin CSS -->
         <link type="text/css" href="{% static 'buttonadmin.css' %}" rel="stylesheet">
-        
+
         <style>
             #myButton {
                 position: fixed;
@@ -37,7 +37,7 @@
                 z-index: 999;  /* Asegúrate de que esté por encima de otros elementos */
             }
         </style>
-        
+
         {% block style %}{% endblock style %}
 
     </head>
@@ -46,10 +46,10 @@
             <meta http-equiv="REFRESH" content="0;url=https://leomalvarez.pythonanywhere.com/">
         {% endif %}
         {% block body %}
-            <!-- particles.js container --> 
+            <!-- particles.js container -->
             <div id="particles-js">
                 <canvas class="particles-js-canvas-el" width="1874" height="1998" style="width: 100%; height: 100%;"></canvas>
-            </div> 
+            </div>
             {% comment %} {% include 'navbar.html' %} {% endcomment %}
             {% block content %}
             {% endblock content %}
@@ -95,8 +95,8 @@
         <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 
 
-        <!-- stats.js lib --> 
-        <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> 
+        <!-- stats.js lib -->
+        <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
         <script src="{% static "animation.js" %}"></script>
 
         <!-- Costom JS-->

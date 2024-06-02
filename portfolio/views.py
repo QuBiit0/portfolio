@@ -21,9 +21,11 @@ from info.models import (
 
 
 def email_send(data):
-    old_message = Message.objects.last()
-    if old_message.name == data['name'] and old_message.email == data['email'] and old_message.message == data['message']:
-        return False
+    # Verifica si hay algún mensaje en la base de datos
+    if Message.objects.exists():
+        old_message = Message.objects.last()
+        if old_message.name == data['name'] and old_message.email == data['email'] and old_message.message == data['message']:
+            return False
     subject = 'Portfolio : Mail from {}'.format(data['name'])
     message = '{}\nSender Email: {}'.format(data['message'], data['email'])
     email_from = settings.EMAIL_HOST_USER
@@ -37,22 +39,21 @@ def homePage(request):
     context = {}
 
     if request.method == 'POST':
-        if request.POST.get('rechaptcha', None):
-            form = MessageForm(request.POST)
-            if form.is_valid():
-                form.save(commit=False)
-                data = {
-                    'name': request.POST['name'],
-                    'email': request.POST['email'],
-                    'message': request.POST['message']
-                }
-                if email_send(data):
-                    form.save()
-
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            # Guarda el formulario en la base de datos
+            form.save()
+            data = {
+                'name': request.POST['name'],
+                'email': request.POST['email'],
+                'message': request.POST['message']
+            }
+            if email_send(data):
                 return JsonResponse({'success': True})
             else:
-                return JsonResponse({'success': False, 'errors': form.errors})
-        return JsonResponse({'success': False, 'errors': "Oops, you have to check the recaptcha !"})
+                return JsonResponse({'success': False, 'errors': 'Message already sent'})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
 
     if request.method == 'GET':
         form = MessageForm()
@@ -67,8 +68,7 @@ def homePage(request):
             'education': education,
             'experiences': experiences,
             'projects': projects,
-            'form': form,
-            'recaptcha_key': config("recaptcha_site_key", default="")
+            'form': form
         }
     return render(request, template_name, context)
 
@@ -116,5 +116,3 @@ def handler404(request, exception):
 
 def test404(request):
     return render(request, 'errors/404.html')
-
-

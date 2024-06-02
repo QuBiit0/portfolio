@@ -1,20 +1,12 @@
-from decouple import config, Csv
-from unipath import Path
-import dj_database_url
-
-# Resto de tu configuración
-
-SECRET_KEY = config('SECRET_KEY', default='tu_secreto_único_y_seguro')
-
-
+from decouple import config
 import os
+import cloudinary
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
@@ -24,7 +16,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 LOGIN_URL = '/dashboard/login/'
@@ -39,13 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'info',
     'dashboard',
-
     'cloudinary_storage',
     'cloudinary',
-
     'ckeditor',
     'rest_framework',
 ]
@@ -58,8 +47,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # whitenoise for static files
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
@@ -77,8 +64,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'libraries':{
-                # make your file entry here.
+            'libraries': {
                 'filter_tags': 'info.templatetags.filter',
             }
         },
@@ -87,45 +73,38 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-
-if not DEBUG:
-    # Database
-    # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-    DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL', default='sqlite:///db.sqlite3')
-    )
-}
-    
-    # Storage settings
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': config('CLOUD_NAME', default=''),
-        'API_KEY': config('API_KEY', default=''),
-        'API_SECRET': config('API_SECRET', default=''),
-    }
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+# Storage settings
+#CLOUDINARY_STORAGE = {
+#    'CLOUD_NAME': config('CLOUD_NAME'),
+#    'API_KEY': config('API_KEY'),
+#    'API_SECRET': config('API_SECRET'),
+#}
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Email settings
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'qubiit$portfolio',
+        'USER': 'qubiit',
+        'PASSWORD': 'k4pd1xa64',
+        'HOST': 'qubiit.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
+    }
+}
 
 # Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -142,9 +121,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -156,9 +134,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -170,3 +147,4 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
